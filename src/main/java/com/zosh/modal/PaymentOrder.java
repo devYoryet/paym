@@ -3,33 +3,41 @@ package com.zosh.modal;
 import com.zosh.domain.PaymentMethod;
 import com.zosh.domain.PaymentOrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@AllArgsConstructor
+@Table(name = "payment_orders")
+@Getter
+@Setter
 @NoArgsConstructor
-@Data
+@AllArgsConstructor
 public class PaymentOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_orders_seq_gen")
+    @SequenceGenerator(name = "payment_orders_seq_gen", sequenceName = "payment_orders_seq", allocationSize = 1)
     private Long id;
 
+    @Column(name = "amount")
     private Long amount;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 50)
     private PaymentOrderStatus status = PaymentOrderStatus.PENDING;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method", length = 50)
     private PaymentMethod paymentMethod;
 
+    @Column(name = "payment_link_id")
     private String paymentLinkId;
 
-
+    @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "booking_id")
     private Long bookingId;
 
-    @Column(nullable = false)
+    @Column(name = "salon_id", nullable = false)
     private Long salonId;
 }
